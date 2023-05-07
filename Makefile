@@ -3,3 +3,6 @@ db:
 
 up:
 	sudo docker compose up
+
+upd:
+	sudo docker compose up -d

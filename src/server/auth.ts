@@ -5,8 +5,9 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import GoogleProvider from "next-auth/providers/google"
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -30,11 +31,11 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      authorization: { params: { access_type: "offline", prompt: "consent", scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar' } },
     }),
   ],
-
 };
 
 
