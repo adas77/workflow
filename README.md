@@ -12,3 +12,8 @@ npm create t3-app@latest
 ```bash
 cat .env.example > .env
 ```
+- Add `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`
+- Generate `NEXTAUTH_SECRET`:
+  ```bash
+  openssl rand -base64 32
+  ```
