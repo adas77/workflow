@@ -2,11 +2,11 @@ import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import CalendarForm from "~/components/CalendarForm";
+import Uploader from "~/components/Uploader";
 import { api } from "~/utils/api";
 
-
-const Home: NextPage<{ res: string }> = ({ res }) => {
-  const { data: sessionData, status: sessionStatus } = useSession()
+const Home: NextPage = () => {
+  const { data: sessionData } = useSession()
   const { mutate: sendMailMutate } = api.google.sendEmail.useMutation()
   return (
     <>
@@ -25,13 +25,12 @@ const Home: NextPage<{ res: string }> = ({ res }) => {
             <button onClick={() => sendMailMutate()}>Send Mail</button>
             <br />
             <CalendarForm />
-            <p>{res}</p>
+            <br />
+            <Uploader />
           </div>
           :
           <button onClick={() => void signIn()}>Sign In</button>
-
         }
-
       </main>
     </>
   );
