@@ -7,8 +7,8 @@ export async function sendMail() {
         const oAuth2ClientGmail = new google.auth.OAuth2(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, env.GOOGLE_GMAIL_REDIRECT_URI);
         oAuth2ClientGmail.setCredentials({ refresh_token: env.GOOGLE_GMAIL_REFRESH_TOKEN })
 
-        const accessToken = await oAuth2ClientGmail.getAccessToken();
-
+        const accessToken = (await oAuth2ClientGmail.getAccessToken()).token
+        if (!accessToken) { throw new Error("Invalid access token") }
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {

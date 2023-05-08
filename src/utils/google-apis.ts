@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker';
 import { google } from 'googleapis';
 import { env } from '~/env.mjs';
 import { prisma } from '~/server/db';
@@ -24,10 +23,10 @@ export async function createEvent(userId: string, { calendarId, summary, descrip
             location,
             colorId: colorId || "9",
             start: {
-                dateTime: start,
+                dateTime: start.toISOString(),
             },
             end: {
-                dateTime: end,
+                dateTime: end.toISOString(),
             },
             // attendees:[{email}],
             conferenceData: {
@@ -45,8 +44,6 @@ export async function createEvent(userId: string, { calendarId, summary, descrip
                     }
                 }
             },
-
-
         }
     }).then((res) => { console.log('res cal:', res) }).catch((e) => { console.log(e) })
     return res
