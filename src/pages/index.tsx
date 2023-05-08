@@ -7,7 +7,7 @@ import { api } from "~/utils/api";
 
 const Home: NextPage<{ res: string }> = ({ res }) => {
   const { data: sessionData, status: sessionStatus } = useSession()
-  const { mutate } = api.google.createEventInCalendar.useMutation()
+  const { mutate: sendMailMutate } = api.google.sendEmail.useMutation()
   return (
     <>
       <Head>
@@ -21,6 +21,8 @@ const Home: NextPage<{ res: string }> = ({ res }) => {
             <p>Hello world!</p>
             <p>{JSON.stringify(sessionData)}</p>
             <button onClick={() => void signOut()}>Sign Out</button>
+            <br />
+            <button onClick={() => sendMailMutate()}>Send Mail</button>
             <br />
             <CalendarForm />
             <p>{res}</p>

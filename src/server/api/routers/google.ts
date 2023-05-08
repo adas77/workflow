@@ -6,6 +6,7 @@ import {
     protectedProcedure
 } from "~/server/api/trpc";
 import { createEvent } from "~/utils/google-apis";
+import { sendMail } from "~/utils/mailer";
 
 export const googleRouter = createTRPCRouter({
     createEventInCalendar: protectedProcedure
@@ -26,5 +27,10 @@ export const googleRouter = createTRPCRouter({
             } catch (error) {
                 throw new TRPCClientError("Error to Google Calendar")
             }
+        }),
+
+    sendEmail: protectedProcedure
+        .mutation(async ({ input, ctx }) => {
+            sendMail().then(res => console.log(res)).catch(err => console.log(err))
         }),
 });

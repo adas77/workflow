@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   /**
@@ -23,6 +23,9 @@ export const env = createEnv({
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    GOOGLE_GMAIL_REFRESH_TOKEN: z.string(),
+    GOOGLE_GMAIL_REDIRECT_URI: z.string(),
+    GOOGLE_GMAIL_USER: z.coerce.string().email().min(5),
   },
 
   /**
@@ -45,5 +48,8 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_GMAIL_REFRESH_TOKEN: process.env.GOOGLE_GMAIL_REFRESH_TOKEN,
+    GOOGLE_GMAIL_REDIRECT_URI: process.env.GOOGLE_GMAIL_REDIRECT_URI,
+    GOOGLE_GMAIL_USER: process.env.GOOGLE_GMAIL_USER,
   },
 });
