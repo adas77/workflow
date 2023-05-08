@@ -5,7 +5,7 @@ import 'filepond/dist/filepond.min.css'
 import { useState } from 'react'
 import { FilePond, registerPlugin } from 'react-filepond'
 import { toast } from 'react-toast'
-import { UPLOAD_MAX_FILES_NUMBER } from '~/consts'
+import { UPLOAD_MAX_FILES_NUMBER, UPLOAD_PART_NAME } from '~/consts'
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
 const Uploader = () => {
@@ -16,7 +16,7 @@ const Uploader = () => {
             var formData = new FormData();
             files.forEach(f => {
                 const mediaFile = f.file
-                formData.append("media", mediaFile)
+                formData.append(UPLOAD_PART_NAME, mediaFile)
             });
 
             const res = await fetch("/api/upload", {
