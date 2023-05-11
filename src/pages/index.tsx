@@ -1,13 +1,21 @@
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import { toast } from "react-toastify";
 import CalendarForm from "~/components/CalendarForm";
 import Uploader from "~/components/Uploader";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession()
-  const { mutate: sendMailMutate } = api.google.sendEmail.useMutation()
+  const { mutate: sendMailMutate } = api.google.sendEmail.useMutation({
+    onSuccess(data, variables, context) {
+      toast.success("Email sent successfully")
+    },
+    onError(error, variables, context) {
+      toast.error("Email not sent")
+    },
+  })
   return (
     <>
       <Head>

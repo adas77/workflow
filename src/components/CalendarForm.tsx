@@ -1,5 +1,5 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from "react-toast";
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { toast } from "react-toastify";
 import type { CalendarEvent } from '~/types/calendar';
 import { api } from '~/utils/api';
 
@@ -7,15 +7,15 @@ const CalendarForm = () => {
     const { register, handleSubmit } = useForm<CalendarEvent>()
     const { mutate: calendarMutate, isLoading } = api.google.createEventInCalendar.useMutation({
         onError() {
-            toast("Error")
+            toast.error("Error")
         },
         onSuccess() {
-            toast("Success")
+            toast.success("Success")
         },
     })
     const onSubmit: SubmitHandler<CalendarEvent> = (data) => {
-        const start = new Date(data.start + "T00:00")
-        const end = new Date(data.end + "T00:00")
+        const start = new Date(String(data.start) + "T00:00")
+        const end = new Date(String(data.end) + "T00:00")
         calendarMutate({ calendar: { ...data, start, end } })
     }
     return (

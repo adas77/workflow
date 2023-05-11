@@ -4,7 +4,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import 'filepond/dist/filepond.min.css'
 import { useState } from 'react'
 import { FilePond, registerPlugin } from 'react-filepond'
-import { toast } from 'react-toast'
+import { toast } from 'react-toastify'
 import { UPLOAD_MAX_FILES_NUMBER, UPLOAD_PART_NAME } from '~/consts'
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
@@ -13,7 +13,7 @@ const Uploader = () => {
     const uploadFiles = async () => {
         try {
             if (!files || files.length < 1) return;
-            var formData = new FormData();
+            const formData = new FormData();
             files.forEach(f => {
                 const mediaFile = f.file
                 formData.append(UPLOAD_PART_NAME, mediaFile)
@@ -35,14 +35,14 @@ const Uploader = () => {
             } = await res.json();
 
             if (error || !data) {
-                toast("Sorry! something went wrong.");
+                toast.error("Sorry! something went wrong.");
                 return;
             }
-            toast("Files uploaded successfylly!");
+            toast.success("Files uploaded successfylly!");
             setFiles([]);
         } catch (error) {
             console.error(error);
-            toast("Sorry! something went wrong.");
+            toast.error("Sorry! something went wrong.");
         }
     };
 

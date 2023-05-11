@@ -23,14 +23,14 @@ export const googleRouter = createTRPCRouter({
         }))
         .mutation(async ({ input, ctx }) => {
             try {
-                createEvent(ctx.session.user.id, { ...input.calendar })
+                await createEvent(ctx.session.user.id, { ...input.calendar })
             } catch (error) {
                 throw new TRPCClientError("Error to Google Calendar")
             }
         }),
 
     sendEmail: protectedProcedure
-        .mutation(async ({ input, ctx }) => {
-            sendMail().then(res => console.log(res)).catch(err => console.log(err))
+        .mutation(async () => {
+            await sendMail().then(res => console.log(res)).catch(err => console.log(err))
         }),
 });
