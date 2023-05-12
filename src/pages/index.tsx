@@ -7,15 +7,15 @@ import Uploader from "~/components/Uploader";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const { data: sessionData } = useSession()
+  const { data: sessionData } = useSession();
   const { mutate: sendMailMutate } = api.google.sendEmail.useMutation({
-    onSuccess(data, variables, context) {
-      toast.success("Email sent successfully")
+    onSuccess(_data, _variables, _context) {
+      toast.success("Email sent successfully");
     },
-    onError(error, variables, context) {
-      toast.error("Email not sent")
+    onError(_error, _variables, _context) {
+      toast.error("Email not sent");
     },
-  })
+  });
   return (
     <>
       <Head>
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {sessionData ?
+        {sessionData ? (
           <div>
             <p>Hello world!</p>
             <p>{JSON.stringify(sessionData)}</p>
@@ -36,9 +36,9 @@ const Home: NextPage = () => {
             <br />
             <Uploader />
           </div>
-          :
+        ) : (
           <button onClick={() => void signIn()}>Sign In</button>
-        }
+        )}
       </main>
     </>
   );

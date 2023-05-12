@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { FormidableError, parseForm } from "~/utils/form";
 
-
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<{
@@ -23,7 +22,9 @@ const handler = async (
     const { files } = await parseForm(req);
     const file = files.media;
     if (!file) return;
-    let url = Array.isArray(file) ? file.map((f) => f.filepath) : file.filepath;
+    const url = Array.isArray(file)
+      ? file.map((f) => f.filepath)
+      : file.filepath;
     res.status(200).json({
       data: {
         url,
