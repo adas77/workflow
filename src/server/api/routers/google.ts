@@ -9,20 +9,26 @@ export const googleRouter = createTRPCRouter({
   createEventInCalendar: protectedProcedure
     .input(
       z.object({
+        userIds: z.string().array().optional(),
         calendar: z.object({
-          // calendarId: z.string().default("primary"),
           summary: z.string().min(1).max(100),
           description: z.string().min(1).max(100),
           location: z.string().min(1).max(100),
           start: z.date(),
           end: z.date(),
-          // colorId: z.string().min(1).max(2).default("9"),
         }),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        await createEvent(ctx.session.user.id, { ...input.calendar });
+        await createEvent(
+          ctx.session.user.id,
+          [
+            "adam.pilewski.workflow@gmail.com",
+            "adam.pilewski.workflow.1@gmail.com",
+          ],
+          { ...input.calendar }
+        );
       } catch (error) {
         throw new TRPCClientError("Error to Google Calendar");
       }
