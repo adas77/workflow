@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import { toast } from "react-toastify";
 import CalendarForm from "~/components/CalendarForm";
 import Uploader from "~/components/Uploader";
@@ -27,6 +28,9 @@ const Home: NextPage = () => {
         {sessionData ? (
           <div>
             <p>Hello world!</p>
+            <Link href={"/tasks"}>
+              <p>Taks</p>
+            </Link>
             <p>{JSON.stringify(sessionData)}</p>
             <button onClick={() => void signOut()}>Sign Out</button>
             <br />
