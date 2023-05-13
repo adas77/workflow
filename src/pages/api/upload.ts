@@ -4,27 +4,38 @@ import { FormidableError, parseForm } from "~/utils/form";
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<{
-    data: {
-      url: string | string[];
-    } | null;
+    data?: {
+      url: FileUrl[];
+    };
     error: string | null;
   }>
 ) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     res.status(405).json({
-      data: null,
       error: "Method Not Allowed",
     });
     return;
   }
   try {
     const { files } = await parseForm(req);
+    console.log(files);
     const file = files.media;
     if (!file) return;
-    const url = Array.isArray(file)
-      ? file.map((f) => f.filepath)
-      : file.filepath;
+    const url: FileUrl[] = Array.isArray(file)
+      ? file.map((f) => {
+          return {
+            filepath: f.filepath,
+            originalFilename: f.originalFilename || "",
+          };
+        })
+      : [
+          {
+            filepath: file.filepath,
+            originalFilename: file.originalFilename || "",
+          },
+        ];
+    console.log("url\n\n\n", url);
     res.status(200).json({
       data: {
         url,
@@ -33,10 +44,10 @@ const handler = async (
     });
   } catch (e) {
     if (e instanceof FormidableError) {
-      res.status(e.httpCode || 400).json({ data: null, error: e.message });
+      res.status(e.httpCode || 400).json({ error: e.message });
     } else {
       console.error(e);
-      res.status(500).json({ data: null, error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error" });
     }
   }
 };

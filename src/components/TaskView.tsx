@@ -1,9 +1,13 @@
 import { TaskView } from "~/types/task";
 import { formatDate } from "~/utils/format";
+import Uploader from "./Uploader";
 
-const TaskView = ({ creator, workers, name, deadline }: TaskView) => {
+const TaskView = ({ creator, workers, name, deadline, id }: TaskView) => {
   return (
     <div>
+      <p>ID</p>
+      <p>{id}</p>
+      <br />
       <p>creator</p>
       <p>{creator.email}</p>
       <br />
@@ -18,6 +22,7 @@ const TaskView = ({ creator, workers, name, deadline }: TaskView) => {
       <p>deadline</p>
       <p>{formatDate(deadline)}</p>
       <br />
+      <Uploader taskIdXd={id} />
     </div>
   );
 };

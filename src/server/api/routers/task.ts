@@ -35,6 +35,41 @@ export const taskRouter = createTRPCRouter({
       }
     }),
 
+  doTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string().min(1).max(100),
+        files: z
+          .object({
+            originalFileName: z.string(),
+            path: z.string(),
+          })
+          .array(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        await ctx.prisma.task.update({
+          where: { id: input.taskId },
+          data: {
+            uploads: {
+              createMany: {
+                data: input.files.map((f) => {
+                  return {
+                    originalFileName: f.originalFileName,
+                    pathToFile: f.path,
+                    authorId: ctx.session.user.id,
+                  };
+                }),
+              },
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCClientError("Error to Update Task");
+      }
+    }),
+
   deleteTask: protectedProcedure
     .input(
       z.object({

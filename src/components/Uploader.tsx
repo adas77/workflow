@@ -6,11 +6,23 @@ import { useState } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 import { toast } from "react-toastify";
 import { UPLOAD_MAX_FILES_NUMBER, UPLOAD_PART_NAME } from "~/consts";
-import { type FilePondUpload } from "~/types/file";
+import { api } from "~/utils/api";
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-const Uploader = () => {
+type Props = {
+  taskIdXd?: string;
+};
+
+const Uploader = ({ taskIdXd }: Props) => {
   const [files, setFiles] = useState<FilePondUpload[]>([]);
+  const { mutate: doTaskMutate } = api.task.doTask.useMutation({
+    onSuccess() {
+      toast.success("Updated files");
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
   const uploadFiles = async () => {
     try {
       if (!files || files.length < 1) return;
@@ -30,8 +42,8 @@ const Uploader = () => {
         error,
       }: {
         data: {
-          url: string | string[];
-        } | null;
+          url: FileUrl[];
+        };
         error: string | null;
       } = await res.json();
 
@@ -39,7 +51,17 @@ const Uploader = () => {
         toast.error("Sorry! something went wrong.");
         return;
       }
+      if (taskIdXd) {
+        doTaskMutate({
+          taskId: taskIdXd,
+          files: data.url.map((f) => {
+            return { originalFileName: f.originalFilename, path: f.filepath };
+          }),
+        });
+      }
+
       toast.success("Files uploaded successfylly!");
+      console.log(data);
       setFiles([]);
     } catch (error) {
       console.error(error);
