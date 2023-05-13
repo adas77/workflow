@@ -76,7 +76,6 @@ const Uploader = ({ taskIdXd }: Props) => {
         onupdatefiles={setFiles}
         allowMultiple={true}
         maxFiles={UPLOAD_MAX_FILES_NUMBER}
-        // server="/api/upload"
         name="files"
         labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
       />

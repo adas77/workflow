@@ -2,7 +2,6 @@ import { faker } from "@faker-js/faker";
 import { google } from "googleapis";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import type { CalendarEvent } from "~/types/calendar";
 
 export async function createEvent(
   ownerUserId: string,

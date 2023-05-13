@@ -1,6 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
-import type { CalendarEvent } from "~/types/calendar";
 import { api } from "~/utils/api";
 import { parseFormDate } from "~/utils/format";
 
@@ -29,19 +28,10 @@ const CalendarForm = () => {
               Create Event
             </h1>
             <form
-              // onSubmit={(e) => void handleSubmit(onSubmit)(e)}
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-4 md:space-y-6"
               action="#"
             >
-              {/* <div>
-                                <label htmlFor="calendarId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Calendar Id</label>
-                                <input {...register('calendarId')} type="text" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  ></input>
-                            </div>
-                            <div>
-                                <label htmlFor="colorId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color Id</label>
-                                <input {...register('colorId')} type="text" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  ></input>
-                            </div> */}
               <div>
                 <label
                   htmlFor="description"

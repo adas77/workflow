@@ -1,4 +1,4 @@
-export type CalendarEvent = {
+type CalendarEvent = {
   calendarId?: string;
   summary: string;
   description: string;
