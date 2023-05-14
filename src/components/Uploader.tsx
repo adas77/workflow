@@ -10,10 +10,10 @@ import { api } from "~/utils/api";
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 type Props = {
-  taskIdXd?: string;
+  taskId?: string;
 };
 
-const Uploader = ({ taskIdXd }: Props) => {
+const Uploader = ({ taskId }: Props) => {
   const [files, setFiles] = useState<FilePondUpload[]>([]);
   const { mutate: doTaskMutate } = api.task.doTask.useMutation({
     onSuccess() {
@@ -51,9 +51,9 @@ const Uploader = ({ taskIdXd }: Props) => {
         toast.error("Sorry! something went wrong.");
         return;
       }
-      if (taskIdXd) {
+      if (taskId) {
         doTaskMutate({
-          taskId: taskIdXd,
+          taskId,
           files: data.url.map((f) => {
             return { originalFileName: f.originalFilename, path: f.filepath };
           }),
