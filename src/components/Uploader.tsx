@@ -1,3 +1,4 @@
+import axios from "axios";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -5,6 +6,7 @@ import "filepond/dist/filepond.min.css";
 import { useState } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 import { toast } from "react-toastify";
+import { z } from "zod";
 import { UPLOAD_MAX_FILES_NUMBER, UPLOAD_PART_NAME } from "~/consts";
 import { api } from "~/utils/api";
 import Button from "./Button";
@@ -36,35 +38,21 @@ const Uploader = ({ taskId }: Props) => {
         formData.append(UPLOAD_PART_NAME, mediaFile);
       });
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const {
-        data,
-        error,
-      }: {
-        data: {
-          url: FileUrl[];
-        };
-        error: string | null;
-      } = await res.json();
-
-      if (error || !data) {
+      const { data } = await fetchFiles(formData);
+      const { url } = data;
+      if (!url) {
         toast.error("Sorry! something went wrong.");
         return;
       }
       if (taskId) {
         doTaskMutate({
           taskId,
-          files: data.url.map((f) => {
+          files: url.map((f) => {
             return { originalFileName: f.originalFilename, path: f.filepath };
           }),
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error("Sorry! something went wrong.");
     } finally {
       setUploadLoading(false);
@@ -89,3 +77,23 @@ const Uploader = ({ taskId }: Props) => {
   );
 };
 export default Uploader;
+
+async function fetchFiles(formData: FormData) {
+  const schema = z.object({
+    data: z.object({
+      url: z.array(
+        z.object({
+          filepath: z.string(),
+          originalFilename: z.string(),
+        })
+      ),
+    }),
+  });
+
+  const res = await axios.post("/api/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return schema.parse(res.data);
+}

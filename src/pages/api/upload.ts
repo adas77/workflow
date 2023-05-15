@@ -35,7 +35,6 @@ const handler = async (
             originalFilename: file.originalFilename || "",
           },
         ];
-    console.log("url\n\n\n", url);
     res.status(200).json({
       data: {
         url,
