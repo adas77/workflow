@@ -1,16 +1,30 @@
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import { env } from "~/env.mjs";
+import { prisma } from "~/server/db";
 
 export async function sendMail() {
   try {
+    const emailUser = await prisma.user.findUniqueOrThrow({
+      where: { email: env.GOOGLE_GMAIL_USER },
+      include: { accounts: true },
+    });
+
+    const { accounts } = emailUser;
+    const acc = accounts.find((a) => a.provider === "google");
+    if (!acc) {
+      throw new Error("Not a Google account");
+    }
+    const { refresh_token } = acc;
+
     const oAuth2ClientGmail = new google.auth.OAuth2(
       env.GOOGLE_CLIENT_ID,
       env.GOOGLE_CLIENT_SECRET,
       env.GOOGLE_GMAIL_REDIRECT_URI
     );
     oAuth2ClientGmail.setCredentials({
-      refresh_token: env.GOOGLE_GMAIL_REFRESH_TOKEN,
+      // refresh_token: env.GOOGLE_GMAIL_REFRESH_TOKEN,
+      refresh_token: refresh_token,
     });
 
     const { token: accessToken } = await oAuth2ClientGmail.getAccessToken();
