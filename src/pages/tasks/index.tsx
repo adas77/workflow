@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { FaBeer } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Layout from "~/components/Layout";
 import TaskForm from "~/components/TaskForm";
 import TaskView from "~/components/TaskView";
 import { api } from "~/utils/api";
@@ -19,7 +19,7 @@ const TasksHome = () => {
   });
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   return (
-    <div>
+    <Layout>
       <p>Users</p>
       {usersList?.map((u) => (
         <p
@@ -28,7 +28,7 @@ const TasksHome = () => {
             setSelectedUsers((prev) => new Set([...prev, u.id]));
           }}
         >
-          {u.id}
+          {u.email}
         </p>
       ))}
       <TaskForm
@@ -36,19 +36,19 @@ const TasksHome = () => {
         refetchTasks={refetchTasks}
       />
       <br />
-      <br />
       <div className="grid grid-cols-3 gap-1">
         {tasksList?.map((task) => (
           <div key={task.id}>
-            <FaBeer
-              onClick={() => mutateTaskDeletion({ taskId: task.id })}
-              className="cursor-pointer"
+            <TaskView
+              onDelete={() => mutateTaskDeletion({ taskId: task.id })}
+              task={task}
             />
-            <TaskView {...task} />
           </div>
         ))}
       </div>
-    </div>
+      <br />
+      <br />
+    </Layout>
   );
 };
 
