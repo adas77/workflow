@@ -37,6 +37,8 @@ export const googleRouter = createTRPCRouter({
   sendEmail: protectedProcedure.mutation(async () => {
     await sendMail()
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((_err) => {
+        throw new Error("Error sending email");
+      });
   }),
 });
