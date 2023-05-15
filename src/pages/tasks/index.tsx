@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import Input from "~/components/Input";
 import Layout from "~/components/Layout";
 import TaskForm from "~/components/TaskForm";
 import TaskView from "~/components/TaskView";
-import TextArea from "~/components/TextArea";
 import { api } from "~/utils/api";
 
 const TasksHome = () => {
