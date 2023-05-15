@@ -1,17 +1,30 @@
-import { TaskView } from "~/types/task";
+import { type MouseEventHandler } from "react";
+import { FaWindowClose } from "react-icons/fa";
+import { type TaskView as TaskViewType } from "~/types/task";
 import { formatDate } from "~/utils/format";
 import Alert from "./Alert";
 import Avatar from "./Avatar";
 import Avatars from "./Avatars";
 import Uploader from "./Uploader";
 
-const TaskView = ({ creator, workers, name, deadline, id }: TaskView) => {
+type Props = {
+  task: TaskViewType;
+  onDelete: MouseEventHandler<SVGElement> | undefined;
+};
+
+const TaskView = ({ task, onDelete }: Props) => {
+  const { id, name, creator, workers, deadline } = task;
   return (
     <>
-      <div>
+      <div className="rounded-2xl bg-base-300">
+        <FaWindowClose
+          size={35}
+          onClick={onDelete}
+          className="cursor-pointer"
+        />
         <Avatar image={creator.image} />
         <p>ID</p>
-        <p>{id}</p>
+        <p>{name}</p>
         <br />
         <p>creator</p>
         <p>{creator.email}</p>
@@ -27,9 +40,7 @@ const TaskView = ({ creator, workers, name, deadline, id }: TaskView) => {
           <Alert variant="success" message={"aaaaaaaa."} />
           <Alert variant="warning" message={"aaaaaaaa."} />
         </div>
-        <br />
-        <p>name</p>
-        <p>{name}</p>
+
         <br />
         <p>deadline</p>
         <p>{formatDate(deadline)}</p>

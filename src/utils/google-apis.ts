@@ -64,6 +64,7 @@ export async function createEvent(
       console.log("res cal:", res);
     })
     .catch((e) => {
+      throw new Error("Error");
       console.log(e);
     });
   return res;

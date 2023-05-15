@@ -7,7 +7,7 @@ type AvatarsProps = {
 };
 
 const Avatars = ({ users, usersToShow }: AvatarsProps) => {
-  usersToShow = usersToShow === undefined || usersToShow <= 0 ? 2 : usersToShow;
+  usersToShow = usersToShow === undefined || usersToShow <= 0 ? 7 : usersToShow;
   const usersCount = users.length;
   const slicedUsers = users.slice(0, usersToShow);
 

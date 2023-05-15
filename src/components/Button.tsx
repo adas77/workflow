@@ -8,22 +8,26 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   size?: btnSize;
   variant?: btnVariant;
-  disabled?: boolean;
   loading?: boolean;
+  normalCase?: boolean;
 }
 
 const Button = ({
+  children,
   size = "medium",
   variant = "regular",
   loading,
-  children,
+  normalCase,
+  className,
   ...props
 }: Props) => {
   return (
     <button
       className={clsx(
         "btn",
+        className,
         loading && "loading",
+        normalCase && "normal-case",
         size === "medium" && "",
         size === "small" && "btn-sm",
         size === "large" && "btn-lg",

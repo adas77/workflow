@@ -7,17 +7,20 @@ import { FilePond, registerPlugin } from "react-filepond";
 import { toast } from "react-toastify";
 import { UPLOAD_MAX_FILES_NUMBER, UPLOAD_PART_NAME } from "~/consts";
 import { api } from "~/utils/api";
+import Button from "./Button";
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 type Props = {
-  taskId?: string;
+  taskId: string;
 };
 
 const Uploader = ({ taskId }: Props) => {
   const [files, setFiles] = useState<FilePondUpload[]>([]);
+  const [uploadLoading, setUploadLoading] = useState(false);
   const { mutate: doTaskMutate } = api.task.doTask.useMutation({
     onSuccess() {
-      toast.success("Updated files");
+      setFiles([]);
+      toast.success("Files uploaded successfylly!");
     },
     onError(error) {
       toast.error(error.message);
@@ -26,6 +29,7 @@ const Uploader = ({ taskId }: Props) => {
   const uploadFiles = async () => {
     try {
       if (!files || files.length < 1) return;
+      setUploadLoading(true);
       const formData = new FormData();
       files.forEach((f) => {
         const mediaFile = f.file;
@@ -59,27 +63,28 @@ const Uploader = ({ taskId }: Props) => {
           }),
         });
       }
-
-      toast.success("Files uploaded successfylly!");
-      console.log(data);
-      setFiles([]);
     } catch (error) {
       console.error(error);
       toast.error("Sorry! something went wrong.");
+    } finally {
+      setUploadLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="grid">
       <FilePond
         files={files}
         onupdatefiles={setFiles}
         allowMultiple={true}
         maxFiles={UPLOAD_MAX_FILES_NUMBER}
         name="files"
+        credits={false}
         labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
       />
-      <button onClick={uploadFiles}>Send</button>
+      <Button variant="ghost" onClick={uploadFiles} loading={uploadLoading}>
+        Send
+      </Button>
     </div>
   );
 };
