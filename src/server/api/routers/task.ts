@@ -1,8 +1,10 @@
 import { TRPCClientError } from "@trpc/client";
 import { z } from "zod";
+import { LOCATION_DEFAULT } from "~/consts";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { type TaskView } from "~/types/task";
+import { createEvent } from "~/utils/google-apis";
 
 export const taskRouter = createTRPCRouter({
   createTask: protectedProcedure
@@ -11,6 +13,7 @@ export const taskRouter = createTRPCRouter({
         name: z.string().min(1).max(100),
         workersIds: z.string().array(),
         deadline: z.date(),
+        saveInCalendar: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -29,6 +32,23 @@ export const taskRouter = createTRPCRouter({
             },
           },
         });
+
+        if (input.saveInCalendar) {
+          const users = await ctx.prisma.user.findMany({
+            where: { id: { in: input.workersIds } },
+          });
+          if (users) {
+            const emails = users.map((user) => user.email);
+            await createEvent(ctx.session.user.id, emails, {
+              summary: `Task: ${task.name}`,
+              description: `${ctx.session.user.email || ""}`,
+              start: task.createdAt,
+              end: task.deadline,
+              location: LOCATION_DEFAULT,
+            });
+          }
+        }
+
         return task;
       } catch (error) {
         throw new TRPCClientError("Error to Create Task");
@@ -130,4 +150,14 @@ export const taskRouter = createTRPCRouter({
       throw new TRPCClientError("Error to Get All Tasks");
     }
   }),
+  search: protectedProcedure
+    .input(z.object({ search: z.string() }))
+    .query(async ({ input, ctx }) => {
+      if (input.search.length <= 0) return null;
+      const tasks = await ctx.prisma.task.findMany({
+        where: { name: { contains: input.search } },
+        include: { creator: true, workers: true },
+      });
+      return tasks;
+    }),
 });

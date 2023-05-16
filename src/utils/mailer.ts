@@ -1,7 +1,6 @@
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import { env } from "~/env.mjs";
-import { prisma } from "~/server/db";
 
 export async function sendMail() {
   try {

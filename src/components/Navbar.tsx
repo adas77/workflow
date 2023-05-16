@@ -1,9 +1,9 @@
-import Link from "next/link";
-import Avatar from "./Avatar";
-import Input from "./Input";
-import Button from "./Button";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { trimString } from "~/utils/format";
+import Avatar from "./Avatar";
+import Button from "./Button";
+import Input from "./Input";
 
 type Nav = {
   label: string;

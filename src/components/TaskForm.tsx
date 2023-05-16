@@ -3,6 +3,9 @@ import { toast } from "react-toastify";
 import { type CreateTask } from "~/types/task";
 import { api } from "~/utils/api";
 import { parseFormDate } from "~/utils/format";
+import Checkbox from "./Checkbox";
+import { useState } from "react";
+import Button from "./Button";
 
 type Props = {
   workersIds: string[];
@@ -10,13 +13,21 @@ type Props = {
 };
 
 const TaskForm = ({ workersIds, refetchTasks }: Props) => {
-  const { register, handleSubmit, reset: resetForm } = useForm<CreateTask>();
+  const [checkedCheckbox, setcheckedCheckbox] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset: resetForm,
+  } = useForm<CreateTask>({
+    defaultValues: { saveInCalendar: checkedCheckbox },
+  });
   const { mutate: taskMutate, isLoading } = api.task.createTask.useMutation({
     onError() {
       toast.error("Error");
     },
     onSuccess() {
       resetForm();
+      setcheckedCheckbox(false);
       refetchTasks();
       toast.success("Success");
     },
@@ -28,6 +39,7 @@ const TaskForm = ({ workersIds, refetchTasks }: Props) => {
       ...data,
       deadline,
       workersIds,
+      saveInCalendar: checkedCheckbox,
     });
   };
   return (
@@ -97,13 +109,22 @@ const TaskForm = ({ workersIds, refetchTasks }: Props) => {
               ></input>
             </div>
 
+            <div>
+              <Checkbox
+                checked={checkedCheckbox}
+                onChange={() => setcheckedCheckbox(!checkedCheckbox)}
+                label="Save In Google Calendar"
+              />
+            </div>
+
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-              <button
-                disabled={isLoading}
+              <Button
+                variant="ghost"
+                loading={isLoading}
                 className="text-primary-600 dark:text-primary-500 font-medium hover:underline"
               >
                 Create
-              </button>
+              </Button>
             </p>
           </form>
         </div>

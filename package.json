@@ -28,6 +28,7 @@
     "filepond-plugin-image-preview": "^4.6.11",
     "formidable": "^2.1.1",
     "googleapis": "^118.0.0",
+    "lodash.debounce": "^4.0.8",
     "mime": "^2.5.2",
     "next": "^13.4.1",
     "next-auth": "^4.21.0",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@types/eslint": "^8.21.3",
     "@types/formidable": "^2.0.5",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/mime": "^3.0.1",
     "@types/node": "^18.15.5",
     "@types/nodemailer": "^6.4.7",

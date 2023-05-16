@@ -2,14 +2,13 @@ import { type MouseEventHandler } from "react";
 import { FaWindowClose } from "react-icons/fa";
 import { type TaskView as TaskViewType } from "~/types/task";
 import { formatDate } from "~/utils/format";
-import Alert from "./Alert";
 import Avatar from "./Avatar";
 import Avatars from "./Avatars";
 import Uploader from "./Uploader";
 
 type Props = {
   task: TaskViewType;
-  onDelete: MouseEventHandler<SVGElement> | undefined;
+  onDelete?: MouseEventHandler<SVGElement> | undefined;
 };
 
 const TaskView = ({ task, onDelete }: Props) => {
@@ -17,11 +16,14 @@ const TaskView = ({ task, onDelete }: Props) => {
   return (
     <>
       <div className="rounded-2xl bg-base-300">
-        <FaWindowClose
-          size={35}
-          onClick={onDelete}
-          className="cursor-pointer"
-        />
+        {onDelete && (
+          <FaWindowClose
+            size={35}
+            onClick={onDelete}
+            className="cursor-pointer"
+          />
+        )}
+
         <Avatar image={creator.image} />
         <p>ID</p>
         <p>{name}</p>
@@ -34,12 +36,12 @@ const TaskView = ({ task, onDelete }: Props) => {
           <p key={w.id}>{w.email}</p>
         ))}
         <Avatars users={...workers} />
-        <div className="space-y-1">
+        {/* <div className="space-y-1">
           <Alert variant="error" message={"aaaaaaaa. bbbbbbbb."} />
           <Alert variant="info" message={"aaaaaaaa."} />
           <Alert variant="success" message={"aaaaaaaa."} />
           <Alert variant="warning" message={"aaaaaaaa."} />
-        </div>
+        </div> */}
 
         <br />
         <p>deadline</p>

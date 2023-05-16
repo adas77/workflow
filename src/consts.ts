@@ -20,3 +20,4 @@ export const UPLOAD_ALLOWED_MIME_TYPES = [
   "image/png",
   "image/gif",
 ];
+export const LOCATION_DEFAULT = "Koszykowa 75, 00-662 Warszawa";

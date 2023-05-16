@@ -5,6 +5,7 @@ type CreateTask = {
   description?: string;
   workersIds: string[];
   deadline: Date;
+  saveInCalendar: boolean;
 };
 
 type TaskView = Task & { creator: User; workers: User[] };

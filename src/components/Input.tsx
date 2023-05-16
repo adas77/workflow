@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { type InputHTMLAttributes } from "react";
+import { type InputHTMLAttributes } from "react";
 
 type inputSize = "small" | "medium" | "large";
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
