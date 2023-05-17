@@ -2,7 +2,7 @@ import { type MouseEventHandler } from "react";
 import { FaWindowClose } from "react-icons/fa";
 import { type TaskView as TaskViewType } from "~/types/task";
 import { formatDate } from "~/utils/format";
-import Avatar from "./Avatar";
+import AvatarLink from "./AvatarLink";
 import Avatars from "./Avatars";
 import Uploader from "./Uploader";
 
@@ -24,7 +24,7 @@ const TaskView = ({ task, onDelete }: Props) => {
           />
         )}
 
-        <Avatar image={creator.image} />
+        <AvatarLink image={creator.image} email={creator.email} />
         <p>ID</p>
         <p>{name}</p>
         <br />
