@@ -1,5 +1,5 @@
 import { type User } from "@prisma/client";
-import Avatar from "./Avatar";
+import AvatarLink from "./AvatarLink";
 
 type AvatarsProps = {
   users: User[];
@@ -14,7 +14,7 @@ const Avatars = ({ users, usersToShow }: AvatarsProps) => {
   return (
     <div className="avatar-group -space-x-6">
       {slicedUsers.map((user) => (
-        <Avatar key={user.id} image={user.image} href={"/"} />
+        <AvatarLink key={user.id} image={user.image} email={user.email} />
       ))}
       {usersCount > usersToShow && (
         <PlaceHolder size={usersCount - usersToShow} />

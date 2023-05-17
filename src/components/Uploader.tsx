@@ -70,7 +70,12 @@ const Uploader = ({ taskId }: Props) => {
         credits={false}
         labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
       />
-      <Button variant="ghost" onClick={uploadFiles} loading={uploadLoading}>
+      <Button
+        disabled={!files || files.length < 1}
+        variant="ghost"
+        onClick={uploadFiles}
+        loading={uploadLoading}
+      >
         Send
       </Button>
     </div>

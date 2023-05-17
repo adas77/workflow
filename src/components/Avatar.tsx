@@ -1,28 +1,25 @@
+import clsx from "clsx";
 import Image from "next/image";
-import Link from "next/link";
 
 type Props = {
   image: string | null | undefined;
-  href?: string | null;
 };
 
-const Avatar = ({ image, href }: Props) => {
-  const img = image || "/img/unknown.jpg";
+const Avatar = ({ image }: Props) => {
+  image ||= "/img/unknown.jpg";
   return (
-    <Link href={href || ""}>
-      <div className="avatar-group -space-x-6">
-        <div className="avatar cursor-pointer">
-          <div className="w-12">
-            <Image
-              height={48}
-              width={48}
-              src={img}
-              alt={`${img}'s avatar image`}
-            />
-          </div>
+    <div className="avatar-group -space-x-6">
+      <div className="avatar cursor-pointer">
+        <div className={clsx("w-12")}>
+          <Image
+            height={48}
+            width={48}
+            src={image}
+            alt={`${image}'s avatar image`}
+          />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
