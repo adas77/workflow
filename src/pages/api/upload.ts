@@ -19,6 +19,9 @@ const handler = async (
   }
   try {
     const { files } = await parseForm(req);
+    if (Object.keys(files).length === 0) {
+      throw new Error("No files found");
+    }
     console.log(files);
     const file = files.media;
     if (!file) return;
