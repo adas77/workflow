@@ -1,4 +1,5 @@
 import { type Task } from "@prisma/client";
+import { type UseTRPCMutationResult } from "@trpc/react-query/shared";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
@@ -7,7 +8,6 @@ import {
   Droppable,
   type DropResult,
 } from "react-beautiful-dnd";
-
 type KanbanColumn = {
   uuid: string;
   name: string;
@@ -18,10 +18,17 @@ type OnDragEndProps = {
   result: DropResult;
   columns: KanbanColumn[];
   setColumns: React.Dispatch<React.SetStateAction<KanbanColumn[]>>;
+  mutation: UseTRPCMutationResult<undefined, undefined, undefined, undefined>;
 };
 
-const onDragEnd = ({ result, columns, setColumns }: OnDragEndProps) => {
+const onDragEnd = ({
+  result,
+  columns,
+  setColumns,
+  mutation,
+}: OnDragEndProps) => {
   if (!result.destination) return;
+  const { mutate } = mutation;
   const { source, destination } = result;
 
   if (source.droppableId !== destination.droppableId) {
@@ -42,6 +49,13 @@ const onDragEnd = ({ result, columns, setColumns }: OnDragEndProps) => {
         items: destItems,
       },
     });
+
+    // OTHER COLUMN
+    console.log("CCC", removed, destColumn);
+    mutate({
+      taskId: removed.id,
+      newStatus: destColumn.name,
+    });
   } else {
     const column = columns[source.droppableId];
     const copiedItems = [...column.items];
@@ -54,13 +68,15 @@ const onDragEnd = ({ result, columns, setColumns }: OnDragEndProps) => {
         items: copiedItems,
       },
     });
+    // SAME COLUMN
   }
 };
 
 type KanbanProps = {
   columns: KanbanColumn[];
+  mutation: UseTRPCMutationResult<undefined, undefined, undefined, undefined>;
 };
-function Kanban({ columns: c }: KanbanProps) {
+function Kanban({ columns: c, mutation }: KanbanProps) {
   const [columns, setColumns] = useState(c);
   const [isBrowser, setIsBrowser] = useState(false);
 
@@ -73,7 +89,9 @@ function Kanban({ columns: c }: KanbanProps) {
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       <DragDropContext
-        onDragEnd={(result) => onDragEnd({ result, columns, setColumns })}
+        onDragEnd={(result) =>
+          onDragEnd({ result, columns, setColumns, mutation })
+        }
       >
         {isBrowser
           ? Object.entries(columns).map(([columnId, column], index) => {
@@ -88,7 +106,11 @@ function Kanban({ columns: c }: KanbanProps) {
                 >
                   <h2>{column.name}</h2>
                   <div style={{ margin: 8 }}>
-                    <Droppable droppableId={columnId} key={columnId}>
+                    <Droppable
+                      droppableId={columnId}
+                      key={columnId}
+                      isDropDisabled={false}
+                    >
                       {(provided, snapshot) => {
                         return (
                           <div
@@ -109,6 +131,7 @@ function Kanban({ columns: c }: KanbanProps) {
                                   key={item.id}
                                   draggableId={item.id}
                                   index={index}
+                                  isDragDisabled={false}
                                 >
                                   {(provided, snapshot) => {
                                     return (

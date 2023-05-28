@@ -1,3 +1,4 @@
+import { type Task } from "@prisma/client";
 import * as dateFn from "date-fns";
 
 export function formatDate(date: Date | number): string {
@@ -23,4 +24,29 @@ export function chunkArr<T>(arr: T[], n: number): T[][] {
       chunks.push(arr.slice(chunkLength * i, chunkLength * (i + 1)));
   }
   return chunks;
+}
+
+export function extractTaskByStatus(tasks: Task[]) {
+  const todo = {
+    uuid: "TODO",
+    name: "TODO",
+    items: tasks.filter((t) => t.status === "TODO"),
+  };
+  const in_p = {
+    uuid: "IN_PROGRESS",
+    name: "IN_PROGRESS",
+    items: tasks.filter((t) => t.status === "IN_PROGRESS"),
+  };
+  const in_qa = {
+    uuid: "IN_QA",
+    name: "IN_QA",
+    items: tasks.filter((t) => t.status === "IN_QA"),
+  };
+  const done = {
+    uuid: "DONE",
+    name: "DONE",
+    items: tasks.filter((t) => t.status === "DONE"),
+  };
+
+  return [todo, in_p, in_qa, done];
 }

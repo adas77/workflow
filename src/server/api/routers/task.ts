@@ -1,6 +1,6 @@
 import { TRPCClientError } from "@trpc/client";
 import { z } from "zod";
-import { LOCATION_DEFAULT } from "~/consts";
+import { LOCATION_DEFAULT, TASK_STATUS } from "~/consts";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { type TaskView } from "~/types/task";
@@ -107,6 +107,26 @@ export const taskRouter = createTRPCRouter({
         await ctx.prisma.task.delete({ where: { id: input.taskId } });
       } catch (error) {
         throw new TRPCClientError("Only creator of task can delete it");
+      }
+    }),
+
+  changeTaskStatus: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string().min(1).max(100),
+        newStatus: z.enum(TASK_STATUS),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        await ctx.prisma.task.update({
+          where: { id: input.taskId },
+          data: {
+            status: input.newStatus,
+          },
+        });
+      } catch (error) {
+        throw new TRPCClientError("Error to Change Task Status");
       }
     }),
 

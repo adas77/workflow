@@ -1,38 +1,31 @@
+import { toast } from "react-toastify";
 import Layout from "~/components/Layout";
 import Kanban from "~/components/kanban/Kanban";
 import { api } from "~/utils/api";
-import { chunkArr } from "~/utils/format";
+import { extractTaskByStatus } from "~/utils/format";
 
 const CalendarHome = () => {
   const { data: tasks, isLoading } = api.task.getAll.useQuery();
+  const changeTaskStatusMutation = api.task.changeTaskStatus.useMutation({
+    onSuccess(variables) {
+      console.log(variables);
+      toast.success(
+        // `Task ${variables.taskId} chnged status to ${variables.newStatus}`
+        "Task status changed"
+      );
+    },
+    onError() {
+      toast.error("Failed to change status of task");
+    },
+  });
   if (!tasks || isLoading) {
     return <>loading...</>;
   }
-
-  const t = chunkArr(tasks, 4);
-  const col1 = {
-    uuid: "TODO",
-    name: "TODO",
-    items: t[0]!,
-  };
-  const col2 = {
-    uuid: "INPROGRESS",
-    name: "INPROGRESS",
-    items: t[1]!,
-  };
-  const col3 = {
-    uuid: "IN QA",
-    name: "IN QA",
-    items: t[2]!,
-  };
-  const col4 = {
-    uuid: "DONE",
-    name: "DONE",
-    items: t[3]!,
-  };
+  // changeTaskStatusMutation.mutate({ taskId: "s", newStatus: "DONE" });
+  const extracted = extractTaskByStatus(tasks);
   return (
     <Layout>
-      <Kanban columns={[col1, col2, col3, col4]} />
+      <Kanban columns={extracted} mutation={changeTaskStatusMutation} />
     </Layout>
   );
 };
