@@ -21,3 +21,5 @@ export const UPLOAD_ALLOWED_MIME_TYPES = [
   "image/gif",
 ];
 export const LOCATION_DEFAULT = "Koszykowa 75, 00-662 Warszawa";
+
+export const TASK_STATUS = ["TODO", "IN_PROGRESS", "IN_QA", "DONE"] as const;

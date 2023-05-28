@@ -62,13 +62,21 @@ const Navbar = () => {
               <a>{trimString(sessionData?.user.email || "")}</a>
             </li>
             <li>
-              <a className="justify-between">
+              <Link
+                className="justify-between"
+                href={`/users/${sessionData?.user.email || ""}`}
+              >
                 Profile
-                <span className="badge">New</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a>Settings</a>
+              <Link
+                className="justify-between"
+                href={`/users/${sessionData?.user.email || ""}`}
+              >
+                Settings
+                <span className="badge">New</span>
+              </Link>
             </li>
             <li>
               {

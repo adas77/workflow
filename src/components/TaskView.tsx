@@ -30,6 +30,8 @@ const TaskView = ({ task, onDelete }: Props) => {
         <br />
         <p>creator</p>
         <p>{creator.email}</p>
+        <p>status</p>
+        <p>{task.status}</p>
         <br />
         <p>workers</p>
         {workers.map((w) => (
