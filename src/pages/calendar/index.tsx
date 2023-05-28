@@ -5,14 +5,15 @@ import { api } from "~/utils/api";
 import { extractTaskByStatus } from "~/utils/format";
 
 const CalendarHome = () => {
-  const { data: tasks, isLoading } = api.task.getAll.useQuery();
+  const { data: tasks, isLoading, refetch } = api.task.getAll.useQuery();
   const changeTaskStatusMutation = api.task.changeTaskStatus.useMutation({
-    onSuccess(variables) {
+    async onSuccess(variables) {
       console.log(variables);
       toast.success(
         // `Task ${variables.taskId} chnged status to ${variables.newStatus}`
         "Task status changed"
       );
+      await refetch();
     },
     onError() {
       toast.error("Failed to change status of task");
