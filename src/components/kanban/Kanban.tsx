@@ -1,35 +1,26 @@
+import { type Task } from "@prisma/client";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  type DropResult,
+} from "react-beautiful-dnd";
 
-const itemsFromBackend = [
-  { id: uuid(), content: "First task" },
-  { id: uuid(), content: "Second task" },
-  { id: uuid(), content: "Third task" },
-  { id: uuid(), content: "Fourth task" },
-  { id: uuid(), content: "Fifth task" },
-];
-
-const columnsFromBackend = {
-  [uuid()]: {
-    name: "Requested",
-    items: itemsFromBackend,
-  },
-  [uuid()]: {
-    name: "To do",
-    items: [],
-  },
-  [uuid()]: {
-    name: "In Progress",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Done",
-    items: [],
-  },
+type KanbanColumn = {
+  uuid: string;
+  name: string;
+  items: Task[];
 };
 
-const onDragEnd = (result, columns, setColumns) => {
+type OnDragEndProps = {
+  result: DropResult;
+  columns: KanbanColumn[];
+  setColumns: React.Dispatch<React.SetStateAction<KanbanColumn[]>>;
+};
+
+const onDragEnd = ({ result, columns, setColumns }: OnDragEndProps) => {
   if (!result.destination) return;
   const { source, destination } = result;
 
@@ -66,8 +57,11 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function Kanban() {
-  const [columns, setColumns] = useState(columnsFromBackend);
+type KanbanProps = {
+  columns: KanbanColumn[];
+};
+function Kanban({ columns: c }: KanbanProps) {
+  const [columns, setColumns] = useState(c);
   const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
@@ -79,7 +73,7 @@ function Kanban() {
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+        onDragEnd={(result) => onDragEnd({ result, columns, setColumns })}
       >
         {isBrowser
           ? Object.entries(columns).map(([columnId, column], index) => {
@@ -134,7 +128,15 @@ function Kanban() {
                                           ...provided.draggableProps.style,
                                         }}
                                       >
-                                        {item.content}
+                                        <div className="flex justify-between">
+                                          {item.name}
+                                          <Link
+                                            className="bg-black"
+                                            href={`/tasks/${item.id}`}
+                                          >
+                                            Click
+                                          </Link>
+                                        </div>
                                       </div>
                                     );
                                   }}

@@ -150,6 +150,25 @@ export const taskRouter = createTRPCRouter({
       throw new TRPCClientError("Error to Get All Tasks");
     }
   }),
+
+  getById: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string().min(1).max(100),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        const task: TaskView = await ctx.prisma.task.findUniqueOrThrow({
+          where: { id: input.taskId },
+          include: { creator: true, workers: true },
+        });
+        return task;
+      } catch (error) {
+        throw new TRPCClientError("Error to Get Task");
+      }
+    }),
+
   search: protectedProcedure
     .input(z.object({ search: z.string() }))
     .query(async ({ input, ctx }) => {
