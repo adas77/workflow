@@ -1,0 +1,139 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[top=3cm, bottom=3cm, left = 2cm, right = 2cm]{geometry} 
+\usepackage{float}
+\geometry{a4paper} 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{graphicx} 
+\usepackage{amsmath,amssymb}  
+\usepackage{bm}  
+\usepackage[pdftex,bookmarks,colorlinks,breaklinks]{hyperref}  
+\usepackage{memhfixc} 
+\usepackage{pdfsync}  
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+
+\title{Internetowy system zarządzania zadaniami pracowniczymi}
+\author{Adam Pilewski}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Wstęp}
+\subsection{Link do reppzytorium}
+\href{https://github.com/adas77/workflow}{Link do kodu projektu na github}
+\subsection{Technologie}
+\begin{enumerate}
+    \item Typescript
+    \item Framework - \href{https://nextjs.org/}{Nextjs} (React)
+    \item Baza danych \begin{enumerate}
+        \item PostgreSQL
+        \item ORM - \href{https://www.prisma.io/}{Prisma}
+    \end{enumerate}
+    \item API \begin{enumerate}
+        \item głównie \href{https://trpc.io/}{tRPC}
+        \item REST dla uploadu plików
+    \end{enumerate}
+    \item \href{https://docs.docker.com/compose/}{Docker Compose}
+\end{enumerate}
+\subsection{Krótki opis}
+Do tej pory skupiłem się bardziej na funkcjonalności niż ładnym interfejsie - stworzyłem tylko podstawowe komponenty - które pozwolą na interakcję z systemem
+
+\pagebreak
+
+\section{Integracja z Google}
+Głównie za pośrednictwem biblioteki \href{https://www.npmjs.com/package/googleapis}{googleapis} oraz \href{https://www.npmjs.com/package/nodemailer}{nodemailer} do wysyłania maili.
+\subsection{Autoryzacja}
+\begin{figure}[H]
+	\centering
+	\includegraphics*[scale=0.2]{img/google-auth.png}
+	\caption{Niezalogowany użytkownik}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.4]{img/google-auth-permissions.png}
+	\caption{Użytkownik wyraza zgode na dostęp aplikacji do jego kalendarza google i danych do autoryzacji}
+\end{figure}
+
+\subsection{Wysyłanie emaili}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.4]{img/send-email.png}
+	\caption{Użytkownik wysyła maila do osoby-osób}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.3]{img/send-email-2.png}
+	\caption{Rezultat}
+\end{figure}
+
+\subsection{Kalendarz i Google Meets}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.8]{img/create-task.png}
+	\caption{Użytkownik tworzy zadania dla konkretnych użytkwników - może je także zapisać w kalendarzu Google'a}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.6]{img/create-task-2.png}
+	\caption{Rezultat - każda z osób przydzielona do zadania - widzi je w kalendarzu i może dołączyć do spotkania}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.3]{img/google-meet.png}
+	\caption{Dołączanie do spotkania}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.2]{img/google-meet-2.png}
+    \caption{2 użytkowników dołączyło do rozmowy}
+\end{figure}
+
+
+\subsection{Podsumowanie}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.4]{img/google-msgs.png}
+	\caption{Przykład powiadomień na skrzynce Google'a - odwołanie zadania, otrzymanie maila, informacja o przekazaniu zezwoleń do Googla dla aplikacji}
+\end{figure}
+
+\section{Kanban Table}
+Przykładowy widok zadań - zadanie jest w danym statusie - przesunięcie powoduje zmianę statusu zadania, po kliknięciu na zadanie widać szczegółowe informacje - usunąć zadanie może tylko osoba która je stworzyła
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.4]{img/kanban.png}
+	\caption{Widok Kanban Board}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.2]{img/task-send-files.png}
+	\caption{Szczegółowy widok zadania i upload plików}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.7]{img/task-send-files-2.png}
+	\caption{Upload plików - pliki przechowywane na serwerze}
+\end{figure}
+\begin{figure}[H]
+	\centering
+    \includegraphics*[scale=0.3]{img/delete-task.png}
+	\caption{Przykład usuwania zadań - jeśli osoba ma uprawnienia, może usunąć, w przeciwnym wypadku odmowa}
+\end{figure}
+\section{TODO na najbliższe tygodnie}
+\begin{enumerate}
+    \item Interfejs użytkownika \begin{enumerate}
+        \item Dodanie komponentów
+        \item Dopracowanie starych komponentów
+        \item Dopracowanie widoków
+    \end{enumerate}
+        \item Dodanie przepływu zadań
+        \item Czat między użytokwnikami
+        \item Widok konkretnego zadania - historia plików
+        \item Widok kalendarza
+\end{enumerate}
+
+\bibliographystyle{abbrv}
+
+\end{document}
