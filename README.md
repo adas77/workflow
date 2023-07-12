@@ -1,8 +1,20 @@
 # Workflow
 ## Opis
 Aplikacja webowa do zarządzania zadaniami pracowniczymi. Zintegrowana z platformą Google (Gmail,Calendar,Hangouts)
-## f
-![What is this](doc/img/create-task.png)
+## Przypadki użycia
+![google-auth](doc/img/google-auth.png)
+![google-auth-permissions](doc/img/google-auth-permissions.png)
+![send-email](doc/img/send-email.png)
+![send-email-2](doc/img/send-email-2.png)
+![create-task](doc/img/create-task.png)
+![create-task-2](doc/img/create-task-2.png)
+![google-meet](doc/img/google-meet.png)
+![google-meet-2](doc/img/google-meet-2.png)
+![google-msgs](doc/img/google-msgs.png)
+![kanban](doc/img/kanban.png)
+![task-send-files](doc/img/task-send-files.png)
+![task-send-files-2](doc/img/task-send-files-2.png)
+![delete-task](doc/img/delete-task.png)
 ## Template
 - [Create T3 App](https://create.t3.gg/)
 ```bash
